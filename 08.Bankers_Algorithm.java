@@ -3,6 +3,8 @@
 algorithm. Assume suitable input required to demonstrate the results.
 
 Note: All the inputs are based on index 1 (i.e. Process number starts from 1)
+
+https://www.geeksforgeeks.org/bankers-algorithm-in-operating-system-2/
 */
 
 import java.util.Scanner;
