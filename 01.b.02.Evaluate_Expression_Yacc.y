@@ -2,49 +2,34 @@
 1.b. Write YACC program to evaluate arithmetic expression involving operators: +, -, *, and /
 
 YACC Part
-*/
-
+//yacc 
 %{
-    #include <stdio.h>
-    #include <stdlib.h>
-    int yylex();
-    int yyerror();
+#include<stdio.h>
 %}
-
+%token NUM
 %left '+' '-'
 %left '*' '/'
-%token NUM
-
 %%
-
-expr: stmt {printf("Result=%d\n", $1);}
-    ;
-stmt: stmt '+' stmt {$$ = $1 + $3;}
-    | stmt '-' stmt {$$ = $1 - $3;}
-    | stmt '*' stmt {$$ = $1 * $3;}
-    | stmt '/' stmt {if($3 != 0) {$$ = $1 / $3;} else {yyerror();}}
-    | NUM {$$ = $1;}
-    ;
-
+expr: e {printf("Result: %d\n", $1); return 0;}
+e : e '+' e {$$ = $1 + $3;}
+| e '-' e {$$ = $1 - $3;}
+| e '*' e {$$ = $1 * $3;}
+| e '/' e {$$ = $1 / $3;}
+|'('e')' {$$ =  $2;}
+| NUM {$$ = $1;}
+;
 %%
-
-void main()
-{
-    if(yyparse() == 0)
-    {
-        // Do Nothing, Result is already printed
-    }
-    else
-    {
-        yyerror();
-    }
+main(){
+printf("type the expression\n");
+yyparse();
+printf("valid expression\n");
+}
+yyerror(){
+printf("Invalid expression\n");
+exit(0);
 }
 
-int yyerror()
-{
-    printf("Invalid Expression\n");
-    exit(0);
-}
+
 
 /*
 Output:

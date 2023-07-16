@@ -4,38 +4,37 @@ expression could be only integers and operators could be + and *. Count the
 identifiers & operators present and print them separately. 
 */
 
+%option noyywrap
 %{
-    int opnd = 0, ac = 0, sc = 0, mc = 0, dc = 0, valid = 0;
-    void ext();
+#include<stdio.h>
+int v=0,op=0,id=0,flag=0;
 %}
 
-%x OPER
+%%
+[0-9][0-9]* {id++;printf("\nIdentifier:");ECHO;}
+[\+\-\*\/\=] {op++;printf("\nOperartor:");ECHO;}
+"(" {v++;}
+")" {v--;}
+";" {flag=1;}
+.|\n {return 0;}
 %%
 
-[a-zA-Z0-9]+ {valid = 1; opnd++; BEGIN OPER;}
-<OPER>"+" {if(valid == 1) {valid = 0; ac++;} else {ext();}}
-<OPER>"-" {if(valid == 1) {valid = 0; sc++;} else {ext();}}
-<OPER>"*" {if(valid == 1) {valid = 0; mc++;} else {ext();}}
-<OPER>"/" {if(valid == 1) {valid = 0; dc++;} else {ext();}}
-<OPER>[a-zA-Z0-9]+ {if (valid == 0) {valid = 1; opnd++;} else {ext();}}
-<OPER>. ext();
-<OPER>\n return 0;
-. ext();
-\n return 0;
-
-%%
-
-void ext()
+int main()
 {
-    printf("Invalid Expression");
-    exit(0);
+	printf("Enter the expression:\n");
+	yylex();
+	if((op+1) ==id && v==0 && flag==0)
+	{
+		printf("\n\nIdentifiers are:%d\nOperators are:%d\n",id,op);
+		printf("\nExpression is Valid\n");
+	}
+	else
+		printf("\nExpression is Invalid\n");
+	return 1;
 }
-void main()
+int yywrap()
 {
-    printf("Enter Expression\n");
-    yylex();
-    printf("Valid Expression\n");
-    printf("Count Operand=%d, Plus=%d, Minus=%d, Multiply=%d, Divide=%d\n", opnd, ac, sc, mc, dc);
+	return 1;
 }
 
 /*

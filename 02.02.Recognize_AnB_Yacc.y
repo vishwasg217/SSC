@@ -3,47 +3,28 @@
 ending with b preceded by n a’s using the grammar a
 n b (note: input n value)
 
-YACC Part
-*/
-
+//yacc
 %{
-    #include <stdio.h>
-    #include <stdlib.h>
-    int count=0;
-    int yylex();
-    int yyerror();
+#include<stdio.h>
 %}
-
 %token A B
 %%
-
-str: T B
-    ;
-T: A T {++count;}
-    |
-    ;
-
+str: s '\n'
+s : x B
+;
+x : x A
+| A
+;
 %%
-
-void main()
-{
-    int n;
-    printf("Enter n value\n");
-    scanf("%d\n", &n);
-
-    if(yyparse() == 0 && n == count)
-    {
-        printf("Valid String\n");
-    }
-    else
-    {
-        yyerror();
-    }
+main(){
+	printf("Type a string\n");
+	if(!yyparse()){
+		printf("valid");
+	}
 }
-
-int yyerror()
-{
-    printf("Invalid String\n");
+int yyerror(){
+	printf("Invalid");
+	exit(0);
 }
 
 /*

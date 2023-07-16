@@ -2,57 +2,44 @@
 6.b. Write YACC program to recognize valid identifier, operators and keywords in the
 given text (C program) file.
 
-YACC PART
-*/
-
+//YACC
 %{
-#include <stdio.h>
-#include <stdlib.h>
-int yylex();
-int yyerror();
-extern FILE *yyin;
-
-int idCount=0, digitCount=0, keyCount=0, opCount=0;
+#include<stdio.h>
+#include<stdlib.h>
+int id = 0,dig =0,key=0,op=0;
 %}
-
-%token DIGIT IDENTIFIER KEYWORD OPERATOR
+%token DIGIT ID KEY OP
 %%
-
 input:
-    DIGIT input { digitCount++; }
-    | IDENTIFIER input { idCount++; }
-    | KEYWORD input { keyCount++; }
-    | OPERATOR input {opCount++;}
-    | DIGIT { digitCount++; }
-    | IDENTIFIER  { idCount++; }
-    | KEYWORD { keyCount++; }
-    | OPERATOR { opCount++;}
-    ;
-
+ DIGIT input {dig++;}
+|ID input {id++;}
+|KEY input {key++;}
+|OP input {op++;}
+|DIGIT {dig++;}
+|ID {id++;}
+|KEY {key++;}
+|OP {op++;}
+;
 %%
-
-void main(int argc, char *argv[]) {
-
-    if(argc != 2)
-    {
-        printf("usage: %s <src file>\n",argv[0]);
-        return;
-    }
-
-    FILE *myfile = fopen(argv[1], "r");
-
-    yyin = myfile;
-    do
-    {
-        yyparse();
-    } while (!feof(yyin));
-    printf("Numbers = %d\nKeywords = %d\nIdentifiers = %d\nOperators = %d\n", digitCount, keyCount,idCount, opCount);
-}
-
-int yyerror()
-{
-    printf("Error");
-    exit(-1);
+#include<stdio.h>
+extern int yylex();
+extern int yyparse();
+extern FILE *yyin;
+main(){
+	FILE *myfile  = fopen("input.c","r");
+	if(!myfile){
+		printf("Can't open file");
+		return -1;
+	}
+	yyin = myfile;
+	do{
+		yyparse();
+	}while(!feof(yyin));
+	printf("numbers = %d\nKeywords=%d\nIdentifiers = %d\nOperators=%d\n",dig,key,id,op);
+} 
+void yyerror(){
+	printf("error");
+	exit(-1);
 }
 
 /*

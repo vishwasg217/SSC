@@ -3,31 +3,20 @@
 resulting program into a separate file.
 */
 
-%x CMNTML CMNTSL
+%{
+#include<stdio.h>
+#include<stdlib.h>
+%}
 %%
-
-"/*" {BEGIN CMNTML;}
-<CMNTML>. ;
-<CMNTML>\n ;
-<CMNTML>"*/" {BEGIN 0;}
-"//" {BEGIN CMNTSL;}
-<CMNTSL>. ;
-<CMNTSL>\n {BEGIN 0;}
-
+\/\/.* ; // " \" used to espace the " / ", " ." means match everything and * means match 0 or more times.  
+\/\*(.*\n)*.*\*\/ ; // 
 %%
-
-void main(int argc,char *argv[])
-{
-    if(argc!=3)
-    {
-        printf("usage: %s <src file> <dst file>\n",argv[0]);
-        return;
-    }
-    yyin=fopen(argv[1],"r");
-    yyout=fopen(argv[2],"w");
-    yylex();
+int main(){
+yyin = fopen("f1.c", "r");
+yyout= fopen("rd.c", "w");
+yylex();
+return 0;
 }
-
 /*
 Output: 
 
